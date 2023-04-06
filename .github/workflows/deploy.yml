@@ -1,8 +1,9 @@
 name: Deployment
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch:
+  
+ # push:
+ #   branches:
+ #     - main
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -63,6 +64,7 @@ jobs:
       - name: Output contents
         run: ls
       - name: Deploy site
+        id: deploysite
         uses: ./.github/actions/deploy-s3-javascript
         env:
         # ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -73,4 +75,8 @@ jobs:
           bucket: 'provide a valid S3 bucket name.'
           dist-folder: 'provide valid dist folder which is ./dist in this example'
           #bucket-region: 'only needed when not default us-east-1'
+      - name: Output information
+        run: |
+          echo "Live URL: ${{ steps.deploysite.outputs.website-url }} "
+
 
