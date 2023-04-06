@@ -63,11 +63,14 @@ jobs:
       - name: Output contents
         run: ls
       - name: Deploy site
-        run: echo "Deploying..."
-  information:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Run custom action
         uses: ./.github/actions/deploy-s3-javascript
+        env:
+        # ${{ secrets.AWS_ACCESS_KEY_ID }}
+        # ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: 'blah which should come from the action secret on the repository'
+          AWS_SECRET_ACCESS_KEY: 'blah'
+        with:
+          bucket: 'provide a valid S3 bucket name.'
+          dist-folder: 'provide valid dist folder which is ./dist in this example'
+          #bucket-region: 'only needed when not default us-east-1'
+
